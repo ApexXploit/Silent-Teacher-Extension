@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "Compteur de fautes – Silent Teacher",
+  "version": "3.0.0",
+  "description": "Affiche en direct le nombre de mauvaises réponses sur Silent Teacher.",
+  "permissions": ["downloads"],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://silentteacher.toxicode.fr/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "css": [
+        "content.css"
+      ],
+      "run_at": "document_idle"
+    }
+  ]
+}
