@@ -69,9 +69,13 @@ async function submitTest(timedOut=false) {
   const button = document.querySelector('[type="submit"]');
   button.disabled = true; button.textContent = "Envoi en cours…";
   const payload = getPayload(timedOut);
+  document.querySelector("#testForm").hidden = true;
+  const result = document.querySelector("#result");
+  result.hidden = false;
+  result.classList.remove("is-error");
+  result.innerHTML = `<h2>${timedOut?"Temps écoulé - ":""}Test d’anglais terminé</h2><strong>${payload.score.correct} / 20</strong><p>${payload.score.percentage} % de bonnes réponses sur la partie automatique.</p><p>Envoi du bilan en cours…</p>`;
+  window.scrollTo({top:0,behavior:"instant"});
   chrome.runtime.sendMessage({type:"submit-english-test",payload}, response => {
-    document.querySelector("#testForm").hidden = true;
-    const result = document.querySelector("#result"); result.hidden = false;
     const ok = !chrome.runtime.lastError && response?.ok;
     result.classList.toggle("is-error",!ok);
     result.innerHTML = `<h2>${timedOut?"Temps écoulé - ":""}Test d’anglais terminé</h2><strong>${payload.score.correct} / 20</strong><p>${payload.score.percentage} % de bonnes réponses sur la partie automatique.</p><p>${ok?"Le bilan synthétique et les réponses ouvertes ont été envoyés par e-mail.":"L’envoi a échoué : "+(response?.error||"service indisponible")}</p>`;

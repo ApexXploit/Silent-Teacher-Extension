@@ -73,7 +73,35 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message?.type === "submit-english-test") {
     (async () => {
       try {
-        const result = await postToRelay({ type: "english-test", ...message.payload });
+        let result;
+        try {
+          result = await postToRelay({ type: "english-test", ...message.payload });
+        } catch (error) {
+          const needsLegacyCapture = /nom de fichier|image manquante/i.test(error?.message || "");
+          if (!needsLegacyCapture || !sender.tab?.windowId) throw error;
+
+          const payload = message.payload || {};
+          const score = payload.score || {};
+          const dataUrl = await chrome.tabs.captureVisibleTab(sender.tab.windowId, { format: "png" });
+          const filename = makeFilename({
+            candidate: payload.candidate,
+            finishedOn: payload.finishedAt
+          });
+          result = await sendCaptureByEmail(
+            dataUrl,
+            filename,
+            payload.candidate,
+            payload.finishedAt,
+            {
+              startedAt: payload.startedAt,
+              right: Number(score.correct || 0),
+              wrong: Math.max(0, Number(score.total || 20) - Number(score.correct || 0)),
+              accuracy: Number(score.percentage || 0),
+              completed: !payload.timedOut
+            }
+          );
+          result.legacyFallback = true;
+        }
         sendResponse({ ok: true, result });
       } catch (error) {
         sendResponse({ ok: false, error: error?.message || "Envoi du test d'anglais impossible" });
