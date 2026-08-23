@@ -1,6 +1,6 @@
 "use strict";
 
-const LIMIT_MS = 50 * 60 * 1000;
+const LIMIT_MS = 20 * 60 * 1000;
 const ANSWERS = { q1:"F",q2:"E",q3:"G",q4:"C",q5:"B",q6:"A",q7:"D",q8:"A",q9:"B",q10:"C",q11:"C",q12:"B",q13:"A",q14:"B",q15:"A",q16:"B",q17:"C",q21:"A",q22:"C",q23:"B" };
 let startedAt = null;
 let finished = false;
