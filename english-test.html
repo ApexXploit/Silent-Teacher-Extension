@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>English Skills Check - Programmeur Jeux Vidéo 2D</title>
+  <link rel="stylesheet" href="english-test.css">
+</head>
+<body>
+  <header class="hero">
+    <div><span class="brand">simplon.co</span><h1>English <em>Skills Check</em></h1><p>PROGRAMMEUR JEUX VIDÉO 2D · POSITIONNEMENT · GAME DEVELOPMENT ENGLISH</p></div>
+    <div class="timer" aria-live="polite"><small>Temps restant</small><strong id="timer">50:00</strong></div>
+  </header>
+
+  <main>
+    <section class="intro card" id="intro">
+      <h2>Informations du candidat</h2>
+      <div class="identity-grid">
+        <label>Prénom<input id="firstName" autocomplete="given-name" required></label>
+        <label>Nom<input id="lastName" autocomplete="family-name" required></label>
+      </div>
+      <div class="facts"><span><b>Durée</b>50 minutes</span><span><b>Score automatique</b>/ 20</span><span><b>Questions ouvertes</b>/ 10 à évaluer</span><span><b>Niveau visé</b>A2+ / B1</span></div>
+      <p class="notice">Une seule réponse par QCM. Les questions ouvertes et la rédaction seront transmises dans l’e-mail pour évaluation humaine.</p>
+      <button id="start" class="primary">Démarrer le test</button>
+    </section>
+
+    <form id="testForm" hidden>
+      <section class="card"><div class="section-title"><span>PART 1</span><h2>Technical vocabulary</h2><b>7 pts</b></div><p>Match each term with the correct definition.</p><div id="vocabulary"></div></section>
+      <section class="card"><div class="section-title"><span>PART 2</span><h2>Grammar in a game project</h2><b>7 pts</b></div><div id="grammar"></div></section>
+      <section class="card"><div class="section-title"><span>PART 3</span><h2>Reading comprehension - A mobile 2D project</h2><b>8 pts</b></div>
+        <article class="reading"><h3>Lighthouse Runner</h3><p>Three learners had five days to create a small 2D mobile game. The player controls a courier who must collect signal batteries and reach a lighthouse before nightfall. The team first made one scene with a static camera to test movement and collisions. They then added a dynamic camera and touch controls.</p><p>Nora imported the character sprites, backgrounds and sound effects. Sam programmed movement, battery collection and the life counter. Ilyes connected the levels and made the score and remaining lives persist when the player changed scenes.</p><p>The game worked well on a recent phone but was slow on an older device because too many particle effects appeared at the same time. The team reduced the particles and compressed several textures. They also added larger text, stronger contrast and movable touch buttons.</p><p>Before the presentation, they documented the controls, main scripts, known limitations and possible future improvements.</p></article>
+        <div id="readingQcm"></div>
+        <label class="open-question"><b>18. Give TWO gameplay features programmed by Sam.</b><textarea name="q18" rows="2"></textarea></label>
+        <label class="open-question"><b>19. Which data persisted when the player changed scenes?</b><textarea name="q19" rows="2"></textarea></label>
+        <label class="open-question"><b>20. Why was the documentation useful?</b><textarea name="q20" rows="3"></textarea></label>
+      </section>
+      <section class="card"><div class="section-title"><span>PART 4</span><h2>Professional English - Daily stand-up</h2><b>3 pts</b></div><p>A. I fixed the collision bug. &nbsp; B. Could you show me how to reproduce it? &nbsp; C. I'll work on the touch controls next. &nbsp; D. The build is in the shared folder.</p><div id="standup"></div></section>
+      <section class="card"><div class="section-title"><span>PART 5</span><h2>Writing task</h2><b>5 pts</b></div>
+        <label>Choose ONE task<select name="writingTask"><option value="A">Task A - Pitch a 2D game (90-120 words)</option><option value="B">Task B - Write a bug report (80-100 words)</option></select></label>
+        <textarea name="writing" rows="10" placeholder="Write in English..."></textarea>
+        <fieldset class="self"><legend>Je me sens...</legend><label><input type="radio" name="selfAssessment" value="À l'aise"> À l'aise</label><label><input type="radio" name="selfAssessment" value="En progrès"> En progrès</label><label><input type="radio" name="selfAssessment" value="J'ai besoin d'aide"> J'ai besoin d'aide</label></fieldset>
+      </section>
+      <div class="submit-zone"><p id="formError" role="alert"></p><button class="primary" type="submit">Terminer et envoyer le bilan</button></div>
+    </form>
+
+    <section id="result" class="card result" hidden aria-live="polite"></section>
+  </main>
+  <script src="english-test.js"></script>
+</body>
+</html>

@@ -28,16 +28,22 @@ function makeFilename(message) {
 
 async function sendCaptureByEmail(dataUrl, filename, candidate, finishedOn, report) {
   const base64 = dataUrl.split(",")[1];
+  return postToRelay({
+    filename,
+    base64,
+    candidate,
+    finishedAt: new Date(finishedOn || Date.now()).toISOString(),
+    report: report || {}
+  });
+}
+
+async function postToRelay(payload) {
   const response = await fetch(DEFAULT_DRIVE_WEB_APP_URL, {
     method: "POST",
     headers: { "Content-Type": "text/plain;charset=utf-8" },
     body: JSON.stringify({
       secret: DEFAULT_DRIVE_UPLOAD_SECRET,
-      filename,
-      base64,
-      candidate,
-      finishedAt: new Date(finishedOn || Date.now()).toISOString(),
-      report: report || {}
+      ...payload
     })
   });
   const responseText = await response.text();
@@ -57,6 +63,25 @@ async function sendCaptureByEmail(dataUrl, filename, candidate, finishedOn, repo
 }
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message?.type === "open-english-test") {
+    const candidate = message.candidate || {};
+    const params = new URLSearchParams({ firstName: candidate.firstName || "", lastName: candidate.lastName || "" });
+    chrome.tabs.create({ url: chrome.runtime.getURL(`english-test.html?${params}`) });
+    return false;
+  }
+
+  if (message?.type === "submit-english-test") {
+    (async () => {
+      try {
+        const result = await postToRelay({ type: "english-test", ...message.payload });
+        sendResponse({ ok: true, result });
+      } catch (error) {
+        sendResponse({ ok: false, error: error?.message || "Envoi du test d'anglais impossible" });
+      }
+    })();
+    return true;
+  }
+
   if (message?.type === "capture-visible-card") {
     (async () => {
       try {

@@ -279,6 +279,7 @@
         </dl>
         <div class="st-counter__status" data-field="status">Test en cours</div>
         <button class="st-counter__copy" type="button">Copier le résultat</button>
+        <button class="st-counter__english-test" type="button">Ouvrir le test d’anglais</button>
       </div>`;
 
     panel.querySelector(".st-counter__toggle").addEventListener("click", () => {
@@ -291,6 +292,10 @@
 
     panel.querySelector(".st-counter__copy").addEventListener("click", async () => {
       await copyText(buildResultText(), panel.querySelector(".st-counter__copy"), "Résultat copié !");
+    });
+
+    panel.querySelector(".st-counter__english-test").addEventListener("click", () => {
+      chrome.runtime.sendMessage({ type: "open-english-test", candidate: readCandidate() });
     });
 
     const candidate = readCandidate();

@@ -12,12 +12,15 @@ Cette extension Chrome/Edge affiche en direct, sur `silentteacher.toxicode.fr` :
 - le taux de précision ;
 - les questions arrivées hors délai ;
 - l'état terminé/en cours du test.
+- un test d'anglais de 50 minutes pour les programmeurs de jeux vidéo 2D ;
+- une correction automatique des 20 questions fermées ;
+- l'envoi par e-mail du score synthétique et des réponses ouvertes à évaluer.
 
 Elle lit l'historique que Silent Teacher conserve dans le navigateur. À la fin du test, l'identité, le bilan et la capture sont transmis au relais Google Apps Script privé afin d'envoyer l'e-mail de résultat.
 
 ## Version
 
-Version de production actuelle : **3.0.0**.
+Version de production actuelle : **4.0.0**.
 
 ## Installation dans Chrome
 
@@ -32,6 +35,8 @@ Dans Edge, utiliser `edge://extensions` puis **Charger l’extension décompress
 ## Utilisation
 
 Le panneau apparaît en haut à droite. Renseignez le prénom et le nom du candidat, puis cliquez sur **Démarrer**. L'identité devient alors non modifiable et la date ainsi que l'heure exactes sont enregistrées. Le bouton **Pause** arrête le décompte et **Reprendre** le relance. Le chrono survit au rechargement de la page.
+
+Le bouton **Ouvrir le test d'anglais** lance le questionnaire dans un nouvel onglet. Son chrono de 50 minutes démarre après validation de l'identité. Les parties vocabulaire, grammaire, QCM de compréhension et dialogue sont notées automatiquement sur 20. Les réponses ouvertes et la rédaction, représentant 10 points supplémentaires, sont reproduites dans l'e-mail pour correction humaine.
 
 À `20:00`, le chrono s'arrête automatiquement et une fenêtre plein écran indique au candidat que le test est terminé. Elle affiche son identité, les horaires et le résultat. **Copier le bilan** produit une trace complète à coller dans votre suivi. **Fermer** masque la fenêtre, mais le chrono reste terminé.
 
