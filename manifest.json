@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Compteur de fautes – Silent Teacher",
-  "version": "4.0.2",
+  "version": "4.0.3",
   "description": "Suit Silent Teacher et propose un test d'anglais pour les programmeurs de jeux vidéo 2D.",
   "permissions": ["downloads"],
   "host_permissions": [

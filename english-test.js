@@ -36,7 +36,10 @@ document.querySelector("#lastName").value = params.get("lastName") || "";
 document.querySelector("#start").addEventListener("click", () => {
   const firstName = document.querySelector("#firstName").value.trim();
   const lastName = document.querySelector("#lastName").value.trim();
-  if (!firstName || !lastName) return alert("Le prénom et le nom sont obligatoires.");
+  const email = document.querySelector("#email");
+  const phone = document.querySelector("#phone").value.trim();
+  if (!firstName || !lastName || !email.value.trim() || !phone) return alert("Tous les champs du candidat sont obligatoires.");
+  if (!email.checkValidity()) return alert("Veuillez saisir une adresse e-mail valide.");
   document.querySelectorAll("#intro input").forEach(input=>input.disabled=true);
   document.querySelector("#start").hidden = true;
   document.querySelector("#testForm").hidden = false;
@@ -54,7 +57,12 @@ function getPayload(timedOut=false) {
     if (value === expected) correct++;
   }
   return {
-    candidate:{firstName:document.querySelector("#firstName").value.trim(),lastName:document.querySelector("#lastName").value.trim()},
+    candidate:{
+      firstName:document.querySelector("#firstName").value.trim(),
+      lastName:document.querySelector("#lastName").value.trim(),
+      email:document.querySelector("#email").value.trim(),
+      phone:document.querySelector("#phone").value.trim()
+    },
     startedAt:new Date(startedAt).toISOString(), finishedAt:new Date().toISOString(), timedOut,
     score:{correct,total:20,percentage:Math.round(correct/20*100),answered:Object.values(objective).filter(Boolean).length},
     objective,

@@ -159,6 +159,8 @@ function sendEnglishTestEmail_(payload) {
   const statusText = payload.timedOut ? "Temps écoulé" : "Remis par le candidat";
   const rows = [
     ["Candidat", identity],
+    ["E-mail", candidate.email || "Non renseigné"],
+    ["Téléphone", candidate.phone || "Non renseigné"],
     ["Début", formatDate_(payload.startedAt)],
     ["Fin", formatDate_(payload.finishedAt)],
     ["Statut", statusText],
@@ -174,7 +176,7 @@ function sendEnglishTestEmail_(payload) {
     return '<div style="margin-top:15px;padding:15px;background:#f4f6f8;border-radius:10px;"><div style="font-size:12px;font-weight:bold;color:#b7113b;">' + escapeHtml_(title) + '</div><div style="margin-top:7px;white-space:pre-wrap;color:#263746;font-size:14px;line-height:1.5;">' + escapeHtml_(value || "Non renseigné") + '</div></div>';
   };
   const htmlBody = '<!doctype html><html lang="fr"><body style="margin:0;background:#f2f5f7;font-family:Arial,sans-serif;color:#17202a;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="padding:32px 12px;"><tr><td align="center"><table role="presentation" width="620" cellpadding="0" cellspacing="0" style="max-width:620px;width:100%;background:#fff;border-radius:18px;overflow:hidden;"><tr><td style="padding:25px 30px;background:#0d3b4a;color:#fff;"><div style="font-size:12px;font-weight:bold;letter-spacing:2px;">TEST D\'ANGLAIS</div><div style="margin-top:6px;font-size:27px;font-weight:800;">English Skills Check</div></td></tr><tr><td style="padding:30px;"><div style="display:inline-block;padding:7px 12px;background:#fbe7ed;color:#b7113b;border-radius:999px;font-size:12px;font-weight:bold;">' + escapeHtml_(statusText.toUpperCase()) + '</div><h1 style="font-size:25px;">Bilan de ' + escapeHtml_(identity) + '</h1><p style="color:#5b6670;">Score automatique sur les 20 questions fermées. Les 10 points de réponses ouvertes restent à évaluer.</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f4f6f8;border-radius:12px;padding:8px 18px;">' + tableRows + '</table><h2 style="margin-top:28px;font-size:18px;">Réponses ouvertes à évaluer (/ 10)</h2>' + answerBlock("18. Gameplay features programmed by Sam", open.q18) + answerBlock("19. Data persisted between scenes", open.q19) + answerBlock("20. Usefulness of documentation", open.q20) + answerBlock("Writing task " + (open.writingTask || "A"), open.writing) + answerBlock("Auto-évaluation", open.selfAssessment) + '<p style="margin-top:24px;color:#86909a;font-size:12px;">Message envoyé automatiquement par l\'extension Silent Teacher.</p></td></tr></table></td></tr></table></body></html>';
-  const body = ["Test d'anglais - " + identity, "", "Bonnes réponses : " + scoreText, "Précision : " + Number(score.percentage || 0) + " %", "Statut : " + statusText, "", "Les réponses ouvertes sont disponibles dans la version HTML de cet e-mail."].join("\n");
+  const body = ["Test d'anglais - " + identity, "", "E-mail : " + (candidate.email || "Non renseigné"), "Téléphone : " + (candidate.phone || "Non renseigné"), "Bonnes réponses : " + scoreText, "Précision : " + Number(score.percentage || 0) + " %", "Statut : " + statusText, "", "Les réponses ouvertes sont disponibles dans la version HTML de cet e-mail."].join("\n");
 
   MailApp.sendEmail({
     to: RECIPIENT_EMAILS.join(","),
