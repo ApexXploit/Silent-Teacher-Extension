@@ -38,6 +38,7 @@ Le panneau apparaît en haut à droite. Renseignez le prénom et le nom du candi
 
 Le bouton **Ouvrir le test d'anglais** lance le questionnaire dans un nouvel onglet. Son chrono de 20 minutes démarre après validation de l'identité. Les parties vocabulaire, grammaire, QCM de compréhension et dialogue sont notées automatiquement sur 20. Les réponses ouvertes et la rédaction, représentant 10 points supplémentaires, sont reproduites dans l'e-mail pour correction humaine.
 Le formulaire recueille également l'adresse e-mail et le numéro de téléphone du candidat ; ces coordonnées figurent dans le bilan transmis.
+Lors du premier envoi, le Google Apps Script crée automatiquement le tableau **Résultats candidats - Silent Teacher**, le partage avec `mgramino@simplon.co`, puis ajoute une ligne pour chaque passage.
 
 À `20:00`, le chrono s'arrête automatiquement et une fenêtre plein écran indique au candidat que le test est terminé. Elle affiche son identité, les horaires et le résultat. **Copier le bilan** produit une trace complète à coller dans votre suivi. **Fermer** masque la fenêtre, mais le chrono reste terminé.
 

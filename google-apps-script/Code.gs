@@ -1,6 +1,9 @@
 const RECIPIENT_EMAILS = [
   "mgramino@simplon.co"
 ];
+const CANDIDATE_SHEET_EDITOR = "mgramino@simplon.co";
+const CANDIDATE_SPREADSHEET_NAME = "Résultats candidats - Silent Teacher";
+const CANDIDATE_SHEET_NAME = "Test d'anglais";
 
 /**
  * Remplacez cette valeur par une longue phrase secrète personnelle, puis
@@ -157,6 +160,7 @@ function sendEnglishTestEmail_(payload) {
   const identity = [candidate.firstName, candidate.lastName].filter(Boolean).join(" ") || "Candidat non renseigné";
   const scoreText = Number(score.correct || 0) + " / " + Number(score.total || 20);
   const statusText = payload.timedOut ? "Temps écoulé" : "Remis par le candidat";
+  const sheetResult = appendEnglishTestToSheet_(payload, statusText);
   const rows = [
     ["Candidat", identity],
     ["E-mail", candidate.email || "Non renseigné"],
@@ -185,7 +189,79 @@ function sendEnglishTestEmail_(payload) {
     htmlBody: htmlBody,
     name: "Silent Teacher"
   });
-  return jsonResponse_({ ok: true, emailed: true, recipients: RECIPIENT_EMAILS, score: score });
+  return jsonResponse_({ ok: true, emailed: true, recipients: RECIPIENT_EMAILS, score: score, spreadsheetUrl: sheetResult.url });
+}
+
+function appendEnglishTestToSheet_(payload, statusText) {
+  const candidate = payload.candidate || {};
+  const score = payload.score || {};
+  const open = payload.openAnswers || {};
+  const spreadsheet = getOrCreateCandidateSpreadsheet_();
+  let sheet = spreadsheet.getSheetByName(CANDIDATE_SHEET_NAME);
+  if (!sheet) sheet = spreadsheet.insertSheet(CANDIDATE_SHEET_NAME);
+
+  const headers = [
+    "Enregistré le", "Prénom", "Nom", "E-mail", "Téléphone", "Début du test",
+    "Fin du test", "Statut", "Bonnes réponses", "Total", "Précision (%)",
+    "Questions renseignées", "Réponse 18", "Réponse 19", "Réponse 20",
+    "Sujet de rédaction", "Rédaction", "Auto-évaluation"
+  ];
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(headers);
+    sheet.getRange(1, 1, 1, headers.length)
+      .setFontWeight("bold")
+      .setBackground("#0d3b4a")
+      .setFontColor("#ffffff");
+    sheet.setFrozenRows(1);
+  }
+
+  sheet.appendRow([
+    new Date(), sheetCell_(candidate.firstName), sheetCell_(candidate.lastName),
+    sheetCell_(candidate.email), sheetCell_(candidate.phone), dateCell_(payload.startedAt),
+    dateCell_(payload.finishedAt), statusText, Number(score.correct || 0),
+    Number(score.total || 20), Number(score.percentage || 0), Number(score.answered || 0),
+    sheetCell_(open.q18), sheetCell_(open.q19), sheetCell_(open.q20),
+    sheetCell_(open.writingTask || "A"), sheetCell_(open.writing), sheetCell_(open.selfAssessment)
+  ]);
+  sheet.autoResizeColumns(1, 12);
+  return { id: spreadsheet.getId(), url: spreadsheet.getUrl() };
+}
+
+function getOrCreateCandidateSpreadsheet_() {
+  const properties = PropertiesService.getScriptProperties();
+  const existingId = properties.getProperty("CANDIDATE_SPREADSHEET_ID");
+  if (existingId) {
+    try {
+      return SpreadsheetApp.openById(existingId);
+    } catch (_error) {
+      properties.deleteProperty("CANDIDATE_SPREADSHEET_ID");
+    }
+  }
+
+  const lock = LockService.getScriptLock();
+  lock.waitLock(30000);
+  try {
+    const lockedId = properties.getProperty("CANDIDATE_SPREADSHEET_ID");
+    if (lockedId) return SpreadsheetApp.openById(lockedId);
+    const spreadsheet = SpreadsheetApp.create(CANDIDATE_SPREADSHEET_NAME);
+    spreadsheet.getSheets()[0].setName(CANDIDATE_SHEET_NAME);
+    DriveApp.getFileById(spreadsheet.getId()).addEditor(CANDIDATE_SHEET_EDITOR);
+    properties.setProperty("CANDIDATE_SPREADSHEET_ID", spreadsheet.getId());
+    return spreadsheet;
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+function sheetCell_(value) {
+  const text = String(value == null ? "" : value);
+  return /^[=+\-@]/.test(text) ? "'" + text : text;
+}
+
+function dateCell_(value) {
+  if (!value) return "";
+  const date = new Date(value);
+  return isNaN(date.getTime()) ? sheetCell_(value) : date;
 }
 
 function escapeHtml_(value) {
