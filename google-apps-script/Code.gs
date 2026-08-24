@@ -223,6 +223,9 @@ function appendEnglishTestToSheet_(payload, statusText) {
     sheetCell_(open.q18), sheetCell_(open.q19), sheetCell_(open.q20),
     sheetCell_(open.writingTask || "A"), sheetCell_(open.writing), sheetCell_(open.selfAssessment)
   ]);
+  const insertedRow = sheet.getLastRow();
+  sheet.getRange(insertedRow, 1).setNumberFormat("dd/MM/yyyy HH:mm:ss");
+  sheet.getRange(insertedRow, 6, 1, 2).setNumberFormat("dd/MM/yyyy HH:mm:ss");
   sheet.autoResizeColumns(1, 12);
   return { id: spreadsheet.getId(), url: spreadsheet.getUrl() };
 }
