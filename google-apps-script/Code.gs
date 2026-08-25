@@ -266,6 +266,10 @@ function getOrCreateCandidateSpreadsheet_() {
   }
 }
 
+function initializeCandidateSpreadsheet() {
+  return getOrCreateCandidateSpreadsheet_().getUrl();
+}
+
 function sheetCell_(value) {
   const text = String(value == null ? "" : value);
   return /^[=+\-@]/.test(text) ? "'" + text : text;
