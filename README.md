@@ -1,55 +1,84 @@
-# Compteur de fautes – Silent Teacher
+# Silent Teacher Extension
 
-Cette extension Chrome/Edge affiche en direct, sur `silentteacher.toxicode.fr` :
+[![Dernière version](https://img.shields.io/github/v/release/ApexXploit/Silent-Teacher-Extension?label=version)](https://github.com/ApexXploit/Silent-Teacher-Extension/releases/latest)
+[![Télécharger](https://img.shields.io/badge/t%C3%A9l%C3%A9charger-derni%C3%A8re%20version-0d3b4a)](https://github.com/ApexXploit/Silent-Teacher-Extension/releases/latest)
 
-- le nombre de mauvaises réponses ;
-- un chronomètre manuel avec pause/reprise et réinitialisation ;
-- un arrêt automatique et une alerte plein écran après 20 minutes ;
-- la saisie obligatoire du nom et du prénom du candidat ;
-- l'enregistrement des dates et heures de début et de fin ;
-- une capture automatique de la fenêtre de fin ;
-- le nombre de bonnes réponses ;
-- le taux de précision ;
-- les questions arrivées hors délai ;
-- l'état terminé/en cours du test.
-- un test d'anglais de 20 minutes pour les programmeurs de jeux vidéo 2D ;
-- une correction automatique des 20 questions fermées ;
-- l'envoi par e-mail du score synthétique et des réponses ouvertes à évaluer.
+Extension Chrome/Edge pour encadrer les tests d'admission **Silent Teacher** et le test d'anglais **English Skills Check**.
 
-Elle lit l'historique que Silent Teacher conserve dans le navigateur. À la fin du test, l'identité, le bilan et la capture sont transmis au relais Google Apps Script privé afin d'envoyer l'e-mail de résultat.
+## Fonctionnalités
 
-## Version
+### Test technique Silent Teacher
 
-Version de production actuelle : **4.0.0**.
+- Comptage en direct des bonnes et mauvaises réponses.
+- Calcul automatique du taux de précision.
+- Indication du parcours terminé ou non terminé.
+- Chronomètre de 20 minutes avec pause, reprise et réinitialisation.
+- Alerte plein écran et arrêt automatique à la fin du temps.
+- Enregistrement du nom, du prénom et des horaires du candidat.
+- Capture automatique de la carte de résultat uniquement.
+- Nom des captures au format `NOM_Prénom_Date_Heure.png`.
+- Suppression de la progression Silent Teacher pour un nouveau candidat.
 
-## Installation dans Chrome
+### Test d'anglais
 
-1. Ouvrir `chrome://extensions`.
-2. Activer **Mode développeur** en haut à droite.
-3. Cliquer sur **Charger l'extension non empaquetée**.
-4. Sélectionner le dossier `silent-teacher-compteur`.
-5. Ouvrir ou recharger <https://silentteacher.toxicode.fr/>.
+- Questionnaire intégré limité à 20 minutes.
+- Prénom, nom, adresse e-mail et numéro de téléphone obligatoires.
+- Correction automatique des 20 questions fermées.
+- Conservation des questions ouvertes et de la rédaction pour correction humaine.
+- Envoi d'un bilan HTML avec le score, la précision et les coordonnées.
+- Enregistrement de chaque passage dans Google Sheets avec les dates et heures.
 
-Dans Edge, utiliser `edge://extensions` puis **Charger l’extension décompressée**.
+## Version actuelle
+
+Version de production : **4.1.3**.
+
+[Télécharger automatiquement la dernière release](https://github.com/ApexXploit/Silent-Teacher-Extension/releases/latest)
+
+Le badge et le lien pointent toujours vers la dernière release GitHub publiée.
+
+## Installation
+
+1. Télécharger la [dernière release](https://github.com/ApexXploit/Silent-Teacher-Extension/releases/latest).
+2. Décompresser complètement l'archive dans un dossier permanent.
+3. Ouvrir `chrome://extensions` ou `edge://extensions`.
+4. Activer le **Mode développeur**.
+5. Supprimer toute ancienne installation de l'extension.
+6. Cliquer sur **Charger l'extension non empaquetée**.
+7. Sélectionner le dossier contenant `manifest.json`.
+8. Ouvrir ou recharger <https://silentteacher.toxicode.fr/>.
+
+Ne chargez pas directement le ZIP et n'installez pas l'extension depuis un dossier temporaire. Cela peut provoquer `ERR_FILE_NOT_FOUND` lors de l'ouverture du test d'anglais.
 
 ## Utilisation
 
-Le panneau apparaît en haut à droite. Renseignez le prénom et le nom du candidat, puis cliquez sur **Démarrer**. L'identité devient alors non modifiable et la date ainsi que l'heure exactes sont enregistrées. Le bouton **Pause** arrête le décompte et **Reprendre** le relance. Le chrono survit au rechargement de la page.
+### Silent Teacher
 
-Le bouton **Ouvrir le test d'anglais** lance le questionnaire dans un nouvel onglet. Son chrono de 20 minutes démarre après validation de l'identité. Les parties vocabulaire, grammaire, QCM de compréhension et dialogue sont notées automatiquement sur 20. Les réponses ouvertes et la rédaction, représentant 10 points supplémentaires, sont reproduites dans l'e-mail pour correction humaine.
-Le formulaire recueille également l'adresse e-mail et le numéro de téléphone du candidat ; ces coordonnées figurent dans le bilan transmis.
-Lors du premier envoi, le Google Apps Script crée automatiquement le tableau **Résultats candidats - Silent Teacher**, le partage avec `mgramino@simplon.co`, puis ajoute une ligne pour chaque passage avec les dates et heures d'enregistrement, de début et de fin au format `jj/mm/aaaa hh:mm:ss`.
+Renseignez le prénom et le nom, puis cliquez sur **Démarrer**. **Pause** arrête le chronomètre et **Reprendre** le relance. Le chrono reste actif après un rechargement.
 
-À `20:00`, le chrono s'arrête automatiquement et une fenêtre plein écran indique au candidat que le test est terminé. Elle affiche son identité, les horaires et le résultat. **Copier le bilan** produit une trace complète à coller dans votre suivi. **Fermer** masque la fenêtre, mais le chrono reste terminé.
+À la fin des 20 minutes, le bilan affiche l'identité, les horaires, les fautes, les bonnes réponses, la précision et l'état du parcours. La capture est envoyée par e-mail. Une copie locale est enregistrée dans `Téléchargements/Silent-Teacher` uniquement si l'envoi échoue.
 
-Une capture de la **carte blanche de résultat uniquement** est automatiquement enregistrée dans le sous-dossier `Silent-Teacher` du dossier de téléchargement du navigateur. Le reste de la page et le fond sombre sont exclus de l'image. Son nom suit la nomenclature `NOM_Prénom_Date_Heure.png`, par exemple `DUPONT_Jeanne_2026-08-13_14-32-05.png`. Si le navigateur demande où enregistrer chaque téléchargement, cette boîte de dialogue peut tout de même apparaître.
+Le bouton **Nouveau candidat** efface l'identité, le chrono et la progression conservée par Silent Teacher.
 
-## Envoi automatique par e-mail
+### English Skills Check
 
-Le dossier `google-apps-script` contient le relais qui envoie chaque capture à **mgramino@simplon.co** en pièce jointe. Une copie locale est créée uniquement en secours si l'envoi par e-mail est indisponible.
+Cliquez sur **Ouvrir le test d'anglais**. Après validation des coordonnées, le chronomètre de 20 minutes démarre. À la remise ou à l'expiration, le bilan est envoyé et enregistré dans Google Sheets.
 
-Le bouton **Nouveau candidat** demande confirmation, puis supprime le nom, le chrono, l'historique des réponses et toute la progression mise en cache par Silent Teacher. La page est ensuite rechargée au début du test. Copiez donc le bilan avant cette réinitialisation : les données supprimées ne sont pas récupérables depuis l'extension.
+## Google Apps Script, e-mail et Google Sheets
 
-Le bouton **Copier le résultat** inclut le temps chronométré et produit une ligne prête à coller dans votre suivi candidat. La corbeille native de Silent Teacher remet le test et le compteur de fautes à zéro ; le chrono se réinitialise avec son propre bouton.
+Le dossier [`google-apps-script`](google-apps-script) contient le relais qui :
 
-Le compteur correspond aux tentatives enregistrées comme `wrong_answer` par le site. Les expirations de temps sont indiquées séparément et ne sont pas comptées comme fautes.
+- envoie les bilans à `mgramino@simplon.co` ;
+- produit les e-mails HTML ;
+- crée le tableau **Résultats candidats - Silent Teacher** ;
+- partage le tableau avec `mgramino@simplon.co` ;
+- ajoute une ligne par passage avec les dates et heures au format `jj/mm/aaaa hh:mm:ss`.
+
+Après une modification de `Code.gs`, créez une **nouvelle version du déploiement Web App** dans Google Apps Script et acceptez les autorisations Gmail, Google Sheets et Google Drive. Mettre uniquement l'extension à jour ne met pas le service Apps Script à jour.
+
+## Mise à jour
+
+Une extension chargée en mode développeur ne se met pas automatiquement à jour depuis GitHub. Pour installer une nouvelle version :
+
+1. Télécharger la [dernière release](https://github.com/ApexXploit/Silent-Teacher-Extension/releases/latest).
+2. Remplacer l'ancien dossier par le nouveau dossier décompressé.
+3. Recharger ou réinstaller l'extension dans `chrome://extensions`.
