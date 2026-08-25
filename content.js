@@ -297,7 +297,8 @@
     panel.querySelector(".st-counter__english-test").addEventListener("click", () => {
       chrome.runtime.sendMessage({ type: "open-english-test", candidate: readCandidate() }, response => {
         if (chrome.runtime.lastError || !response?.ok) {
-          alert("Le test d'anglais n'est pas disponible dans cette installation. Supprimez l'ancienne extension, puis installez la version 4.1.3 complète.");
+          const version = chrome.runtime.getManifest().version;
+          alert(`Le test d'anglais n'est pas disponible dans cette installation. Réinstallez la version ${version} complète dans un dossier permanent.`);
         }
       });
     });
