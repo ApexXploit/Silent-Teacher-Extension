@@ -64,10 +64,20 @@ async function postToRelay(payload) {
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message?.type === "open-english-test") {
-    const candidate = message.candidate || {};
-    const params = new URLSearchParams({ firstName: candidate.firstName || "", lastName: candidate.lastName || "" });
-    chrome.tabs.create({ url: chrome.runtime.getURL(`english-test.html?${params}`) });
-    return false;
+    (async () => {
+      try {
+        const pageUrl = chrome.runtime.getURL("english-test.html");
+        const resource = await fetch(pageUrl);
+        if (!resource.ok) throw new Error("Le fichier du test d'anglais est absent de l'extension");
+        const candidate = message.candidate || {};
+        const params = new URLSearchParams({ firstName: candidate.firstName || "", lastName: candidate.lastName || "" });
+        await chrome.tabs.create({ url: `${pageUrl}?${params}` });
+        sendResponse({ ok: true });
+      } catch (error) {
+        sendResponse({ ok: false, error: error?.message || "Ouverture du test d'anglais impossible" });
+      }
+    })();
+    return true;
   }
 
   if (message?.type === "submit-english-test") {
