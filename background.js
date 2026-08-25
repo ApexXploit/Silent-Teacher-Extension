@@ -92,15 +92,25 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
           const payload = message.payload || {};
           const score = payload.score || {};
+          const candidate = payload.candidate || {};
+          const contactParts = [
+            candidate.lastName || "",
+            candidate.email ? `E-mail : ${candidate.email}` : "",
+            candidate.phone ? `Téléphone : ${candidate.phone}` : ""
+          ].filter(Boolean);
+          const legacyCandidate = {
+            firstName: candidate.firstName || "",
+            lastName: contactParts.join(" — ")
+          };
           const dataUrl = await chrome.tabs.captureVisibleTab(sender.tab.windowId, { format: "png" });
           const filename = makeFilename({
-            candidate: payload.candidate,
+            candidate,
             finishedOn: payload.finishedAt
           });
           result = await sendCaptureByEmail(
             dataUrl,
             filename,
-            payload.candidate,
+            legacyCandidate,
             payload.finishedAt,
             {
               startedAt: payload.startedAt,

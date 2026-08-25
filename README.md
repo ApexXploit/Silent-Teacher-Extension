@@ -30,7 +30,7 @@ Extension Chrome/Edge pour encadrer les tests d'admission **Silent Teacher** et 
 
 ## Version actuelle
 
-Version de production : **4.1.3**.
+Version de production : **4.1.4**.
 
 [Télécharger automatiquement la dernière release](https://github.com/ApexXploit/Silent-Teacher-Extension/releases/latest)
 
