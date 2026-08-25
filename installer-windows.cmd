@@ -1,7 +1,14 @@
 @echo off
 setlocal
 
-set "DEST=%LOCALAPPDATA%\SilentTeacherExtension"
+net session >nul 2>&1
+if not "%errorlevel%"=="0" (
+  echo Demande des droits administrateur...
+  powershell -NoProfile -ExecutionPolicy Bypass -Command "Start-Process -FilePath '%~f0' -Verb RunAs"
+  exit /b
+)
+
+set "DEST=%SystemDrive%\SilentTeacherExtension"
 
 echo Installation de Silent Teacher Extension...
 if not exist "%DEST%" mkdir "%DEST%"
@@ -23,6 +30,9 @@ echo %DEST%
 echo.
 echo Dans Chrome, cliquez sur Charger l'extension non empaquetee
 echo puis selectionnez ce dossier.
+echo Le chemin a egalement ete copie dans le presse-papiers.
+
+echo %DEST%| clip
 
 start "" explorer.exe "%DEST%"
 start "" chrome.exe "chrome://extensions"

@@ -30,7 +30,7 @@ Extension Chrome/Edge pour encadrer les tests d'admission **Silent Teacher** et 
 
 ## Version actuelle
 
-Version de production : **4.2.0**.
+Version de production : **4.2.1**.
 
 [Télécharger automatiquement la dernière release](https://github.com/ApexXploit/Silent-Teacher-Extension/releases/latest)
 
@@ -41,14 +41,14 @@ Le badge et le lien pointent toujours vers la dernière release GitHub publiée.
 1. Télécharger la [dernière release](https://github.com/ApexXploit/Silent-Teacher-Extension/releases/latest).
 2. Décompresser complètement l'archive.
 3. Double-cliquer sur `installer-windows.cmd`.
-4. L'installateur copie les fichiers dans `%LOCALAPPDATA%\SilentTeacherExtension` et ouvre ce dossier.
+4. Accepter la demande de droits administrateur. L'installateur copie les fichiers dans `C:\SilentTeacherExtension` et ouvre ce dossier.
 5. Dans `chrome://extensions`, activer le **Mode développeur**.
 6. Supprimer toute ancienne installation de l'extension.
 7. Cliquer sur **Charger l'extension non empaquetée**.
-8. Sélectionner `%LOCALAPPDATA%\SilentTeacherExtension`.
+8. Sélectionner `C:\SilentTeacherExtension`. Le chemin est automatiquement placé dans le presse-papiers par l'installateur.
 9. Ouvrir ou recharger <https://silentteacher.toxicode.fr/>.
 
-Ne chargez pas directement le ZIP, la clé USB ou un dossier temporaire. L'emplacement `%LOCALAPPDATA%\SilentTeacherExtension` reste disponible après le retrait de la clé et évite `ERR_FILE_NOT_FOUND`.
+Ne chargez pas directement le ZIP, la clé USB ou un dossier temporaire. L'emplacement fixe `%SystemDrive%\SilentTeacherExtension` reste disponible après le retrait de la clé et évite `ERR_FILE_NOT_FOUND`.
 
 ## Utilisation
 
