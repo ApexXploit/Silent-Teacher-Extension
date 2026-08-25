@@ -4,6 +4,7 @@ const RECIPIENT_EMAILS = [
 const CANDIDATE_SHEET_EDITOR = "mgramino@simplon.co";
 const CANDIDATE_SPREADSHEET_NAME = "Résultats candidats - Silent Teacher";
 const CANDIDATE_SHEET_NAME = "Test d'anglais";
+const SILENT_TEACHER_SHEET_NAME = "Silent Teacher";
 
 /**
  * Remplacez cette valeur par une longue phrase secrète personnelle, puis
@@ -52,6 +53,7 @@ function doPost(event) {
     const badgeColor = completed ? "#18744d" : "#9a5700";
     const resultText = Number(report.wrong || 0) + " faute(s) · " + Number(report.right || 0) + " bonne(s)";
     const accuracyText = Number(report.accuracy || 0) + " %";
+    const sheetResult = appendSilentTeacherToSheet_(payload, filename);
     const subject = "Test technique Silent Teacher - " + identity + " - " + statusText;
     const body = [
       "Un test technique Silent Teacher vient de s'arrêter.",
@@ -156,7 +158,8 @@ function doPost(event) {
       ok: true,
       filename: filename,
       emailed: true,
-      recipients: RECIPIENT_EMAILS
+      recipients: RECIPIENT_EMAILS,
+      spreadsheetUrl: sheetResult.url
     });
   } catch (error) {
     return jsonResponse_({ ok: false, error: error.message });
@@ -237,6 +240,41 @@ function appendEnglishTestToSheet_(payload, statusText) {
   sheet.getRange(insertedRow, 1).setNumberFormat("dd/MM/yyyy HH:mm:ss");
   sheet.getRange(insertedRow, 6, 1, 2).setNumberFormat("dd/MM/yyyy HH:mm:ss");
   sheet.autoResizeColumns(1, 12);
+  return { id: spreadsheet.getId(), url: spreadsheet.getUrl() };
+}
+
+function appendSilentTeacherToSheet_(payload, filename) {
+  const candidate = payload.candidate || {};
+  const report = payload.report || {};
+  const spreadsheet = getOrCreateCandidateSpreadsheet_();
+  let sheet = spreadsheet.getSheetByName(SILENT_TEACHER_SHEET_NAME);
+  if (!sheet) sheet = spreadsheet.insertSheet(SILENT_TEACHER_SHEET_NAME);
+
+  const headers = [
+    "Enregistré le", "Prénom", "Nom", "E-mail", "Téléphone",
+    "Début du test", "Fin du test", "Bonnes réponses", "Fautes",
+    "Précision (%)", "Parcours", "Capture"
+  ];
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(headers);
+    sheet.getRange(1, 1, 1, headers.length)
+      .setFontWeight("bold")
+      .setBackground("#d14339")
+      .setFontColor("#ffffff");
+    sheet.setFrozenRows(1);
+  }
+
+  sheet.appendRow([
+    new Date(), sheetCell_(candidate.firstName), sheetCell_(candidate.lastName),
+    sheetCell_(candidate.email), sheetCell_(candidate.phone), dateCell_(report.startedAt),
+    dateCell_(payload.finishedAt), Number(report.right || 0), Number(report.wrong || 0),
+    Number(report.accuracy || 0), report.completed ? "Parcours terminé" : "Parcours non terminé",
+    sheetCell_(filename)
+  ]);
+  const insertedRow = sheet.getLastRow();
+  sheet.getRange(insertedRow, 1).setNumberFormat("dd/MM/yyyy HH:mm:ss");
+  sheet.getRange(insertedRow, 6, 1, 2).setNumberFormat("dd/MM/yyyy HH:mm:ss");
+  sheet.autoResizeColumns(1, headers.length);
   return { id: spreadsheet.getId(), url: spreadsheet.getUrl() };
 }
 

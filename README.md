@@ -72,7 +72,8 @@ Le dossier [`google-apps-script`](google-apps-script) contient le relais qui :
 - produit les e-mails HTML ;
 - crée le tableau **Résultats candidats - Silent Teacher** ;
 - partage le tableau avec `mgramino@simplon.co` ;
-- ajoute une ligne par passage avec les dates et heures au format `jj/mm/aaaa hh:mm:ss`.
+- ajoute une ligne par passage avec les dates et heures au format `jj/mm/aaaa hh:mm:ss` ;
+- sépare les résultats dans deux onglets : **Test d'anglais** et **Silent Teacher**.
 
 Après une modification de `Code.gs`, créez une **nouvelle version du déploiement Web App** dans Google Apps Script et acceptez les autorisations Gmail, Google Sheets et Google Drive. Mettre uniquement l'extension à jour ne met pas le service Apps Script à jour.
 
