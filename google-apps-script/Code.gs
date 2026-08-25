@@ -57,6 +57,8 @@ function doPost(event) {
       "Un test technique Silent Teacher vient de s'arrêter.",
       "",
       "Candidat : " + identity,
+      "E-mail : " + (candidate.email || "Non renseigné"),
+      "Téléphone : " + (candidate.phone || "Non renseigné"),
       "Début : " + formatDate_(report.startedAt),
       "Date de fin : " + (payload.finishedAt || "Non renseignée"),
       "Résultat : " + resultText,
@@ -90,6 +92,14 @@ function doPost(event) {
                         <tr>
                           <td style="padding:12px 0;border-bottom:1px solid #dde3e7;color:#707b85;font-size:13px;">Candidat</td>
                           <td align="right" style="padding:12px 0;border-bottom:1px solid #dde3e7;color:#17202a;font-size:14px;font-weight:bold;">${escapeHtml_(identity)}</td>
+                        </tr>
+                        <tr>
+                          <td style="padding:12px 0;border-bottom:1px solid #dde3e7;color:#707b85;font-size:13px;">E-mail</td>
+                          <td align="right" style="padding:12px 0;border-bottom:1px solid #dde3e7;color:#17202a;font-size:14px;font-weight:bold;">${escapeHtml_(candidate.email || "Non renseigné")}</td>
+                        </tr>
+                        <tr>
+                          <td style="padding:12px 0;border-bottom:1px solid #dde3e7;color:#707b85;font-size:13px;">Téléphone</td>
+                          <td align="right" style="padding:12px 0;border-bottom:1px solid #dde3e7;color:#17202a;font-size:14px;font-weight:bold;">${escapeHtml_(candidate.phone || "Non renseigné")}</td>
                         </tr>
                         <tr>
                           <td style="padding:12px 0;border-bottom:1px solid #dde3e7;color:#707b85;font-size:13px;">Début du test</td>
